@@ -55,7 +55,7 @@ function setupFirebase() {
     const firebaseConfig = {
       apiKey: "AIzaSyBxJAZxfeMYoZfVe5b4QVP4H-Xg9ZC1gvs",
       authDomain: "findmyspot-parking.firebaseapp.com",
-      databaseURL: "https://findmyspot-parking-default-rtdb.firebaseio.com",
+      databaseURL: "https://findmyspot-88397-default-rtdb.firebaseio.com",
       projectId: "findmyspot-parking",
       storageBucket: "findmyspot-parking.appspot.com",
       messagingSenderId: "123456789012",
