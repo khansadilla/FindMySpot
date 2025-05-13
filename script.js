@@ -3,105 +3,94 @@ var firebase = firebase || {}
 
 // Firebase configuration and initialization
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize with default values to show the UI even without Firebase
-  initializeParkingUI()
-
-  // Try to connect to Firebase
+  // Initialize Firebase directly
   initializeFirebase()
 })
-
-// Function to initialize the UI with default values
-function initializeParkingUI() {
-  const slots = [
-    { id: "slot1", initialStatus: "empty" },
-    { id: "slot2", initialStatus: "empty" },
-    { id: "slot3", initialStatus: "empty" },
-    { id: "slot4", initialStatus: "empty" },
-  ]
-
-  // Set initial UI state
-  const slotStatuses = {}
-  slots.forEach((slot) => {
-    slotStatuses[slot.id] = slot.initialStatus
-    updateSlotUI(slot.id, slot.initialStatus)
-  })
-
-  updateAvailableCount(slotStatuses)
-}
 
 // Function to initialize Firebase
 function initializeFirebase() {
   try {
-    // Import Firebase modules using a more compatible approach
-    const firebaseScript = document.createElement("script")
-    firebaseScript.src = "https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"
-    firebaseScript.onload = () => {
-      const databaseScript = document.createElement("script")
-      databaseScript.src = "https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"
-      databaseScript.onload = setupFirebase
-      document.head.appendChild(databaseScript)
-    }
-    document.head.appendChild(firebaseScript)
-  } catch (error) {
-    console.error("Error loading Firebase:", error)
-    showConnectionStatus("Failed to load Firebase. Check console for details.", "error")
-  }
-}
-
-// Setup Firebase after scripts are loaded
-function setupFirebase() {
-  try {
-    // Firebase configuration
+    // Firebase configuration - using your exact configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyBxJAZxfeMYoZfVe5b4QVP4H-Xg9ZC1gvs",
-      authDomain: "findmyspot-parking.firebaseapp.com",
-      databaseURL: "https://findmyspot-88397-default-rtdb.firebaseio.com",
-      projectId: "findmyspot-parking",
-      storageBucket: "findmyspot-parking.appspot.com",
-      messagingSenderId: "123456789012",
-      appId: "1:123456789012:web:abc123def456ghi789jkl",
+      apiKey: "AIzaSyBtgVIVierhgo0jUXCbHBvMtLlRBzSEmp8",
+      authDomain: "findmyspot-88397.firebaseapp.com",
+      databaseURL: "https://findmyspot-88397-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "findmyspot-88397",
+      storageBucket: "findmyspot-88397.firebasestorage.app",
+      messagingSenderId: "428682515015",
+      appId: "1:428682515015:web:9f809579d54d201cbd9762",
+      measurementId: "G-0NH31RNKMX",
     }
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig)
     const database = firebase.database()
 
-    // Set up real-time listeners for each slot
-    for (let i = 1; i <= 4; i++) {
-      const slotId = `slot${i}`
-      const slotRef = database.ref(`/${slotId}/status`)
+    // DOM Elements
+    const connectionStatus = document.getElementById("connection-status")
+    const statusIndicator = connectionStatus.querySelector(".status-indicator")
+    const statusText = connectionStatus.querySelector(".status-text")
 
-      slotRef.on(
-        "value",
-        (snapshot) => {
-          const status = snapshot.val() || "unknown"
-          updateSlotUI(slotId, status)
-          updateSlotStatus(slotId, status)
+    // Set initial connection status
+    updateConnectionStatus("connecting", "Connecting to Firebase...")
 
-          // Log data received from ESP32
-          console.log(`Data received from ESP32 for ${slotId}: ${status}`)
-        },
-        (error) => {
-          console.error(`Error reading ${slotId}:`, error)
-          showConnectionStatus(`Error reading ${slotId}: ${error.message}`, "error")
-        },
-      )
-    }
-
-    // Monitor connection state
-    const connectedRef = database.ref(".info/connected")
+    // Check Firebase connection
+    const connectedRef = firebase.database().ref(".info/connected")
     connectedRef.on("value", (snap) => {
       if (snap.val() === true) {
-        showConnectionStatus("Connected to Firebase. Receiving real-time updates from ESP32 sensors.", "success")
+        updateConnectionStatus("connected", "Connected to Firebase")
       } else {
-        showConnectionStatus("Disconnected from Firebase. Waiting for connection...", "warning")
+        updateConnectionStatus("disconnected", "Disconnected from Firebase")
       }
     })
+
+    // Track previous slot statuses to detect changes
+    const previousStatuses = {
+      slot1: null,
+      slot2: null,
+      slot3: null,
+      slot4: null,
+    }
+
+    // Get data from Firebase and display slot status
+    const slotRef = database.ref() // Get root of database
+    slotRef.on(
+      "value",
+      (snapshot) => {
+        console.log("Data from Firebase: ", snapshot.val())
+
+        const data = snapshot.val()
+        if (data) {
+          // Update each slot with its status from Firebase
+          for (let i = 1; i <= 4; i++) {
+            const slotKey = `slot${i}`
+            const slotData = data[slotKey]
+
+            if (slotData && slotData.status) {
+              updateSlot(slotKey, slotData.status)
+            } else {
+              console.warn(`No data found for ${slotKey}`)
+              updateSlot(slotKey, "unknown")
+            }
+          }
+
+          // Update summary counts
+          updateSummary(data)
+        } else {
+          updateConnectionStatus("disconnected", "No data found in Firebase")
+          console.warn("No data received from Firebase")
+        }
+      },
+      (error) => {
+        console.error("Error reading data: ", error)
+        updateConnectionStatus("disconnected", "Error connecting to Firebase")
+      },
+    )
 
     console.log("Firebase initialized successfully")
   } catch (error) {
     console.error("Error setting up Firebase:", error)
-    showConnectionStatus("Failed to setup Firebase. Check console for details.", "error")
+    updateConnectionStatus("disconnected", "Failed to setup Firebase")
   }
 }
 
@@ -169,4 +158,79 @@ function showConnectionStatus(message, type) {
     statusElement.textContent = message
     statusElement.className = `connection-status ${type}`
   }
+}
+
+// Function to update connection status
+function updateConnectionStatus(status, message) {
+  const connectionStatus = document.getElementById("connection-status")
+  const statusIndicator = connectionStatus.querySelector(".status-indicator")
+  const statusText = connectionStatus.querySelector(".status-text")
+
+  statusIndicator.className = "status-indicator " + status
+  statusText.textContent = message
+}
+
+// Track previous slot statuses to detect changes
+const previousStatuses = {
+  slot1: null,
+  slot2: null,
+  slot3: null,
+  slot4: null,
+}
+
+// Function to update slot UI
+function updateSlot(slotId, status) {
+  const slotElement = document.getElementById(slotId)
+  if (!slotElement) {
+    console.error(`Element with ID ${slotId} not found`)
+    return
+  }
+
+  console.log(`Updating ${slotId} with status: ${status}`)
+
+  // Default to unknown if status is undefined
+  status = status || "unknown"
+
+  // Update slot classes
+  slotElement.className = "slot-card"
+  if (status === "empty" || status === "occupied") {
+    slotElement.classList.add(status)
+  }
+
+  // Update slot status text
+  const statusElement = slotElement.querySelector(".slot-status")
+  statusElement.textContent = status.charAt(0).toUpperCase() + status.slice(1)
+
+  // Update time
+  const timeElement = slotElement.querySelector(".slot-time")
+  const now = new Date()
+  timeElement.textContent = `Updated: ${now.toLocaleTimeString()}`
+
+  // Add animation for status change
+  slotElement.classList.add("status-changed")
+  setTimeout(() => {
+    slotElement.classList.remove("status-changed")
+  }, 500)
+}
+
+// Function to update summary counts
+function updateSummary(data) {
+  let emptyCount = 0
+  let occupiedCount = 0
+
+  // Count slots by status
+  for (let i = 1; i <= 4; i++) {
+    const slotKey = `slot${i}`
+    const status = data[slotKey]?.status
+
+    if (status === "empty") {
+      emptyCount++
+    } else if (status === "occupied") {
+      occupiedCount++
+    }
+  }
+
+  // Update summary elements
+  document.getElementById("available-count").textContent = emptyCount
+  document.getElementById("occupied-count").textContent = occupiedCount
 }
