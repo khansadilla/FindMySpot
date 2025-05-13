@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FindMySpot Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    #status-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .slot-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      width: 150px;
+      text-align: center;
+      font-weight: bold;
+      color: white;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty {
+      background-color: #4CAF50; /* Green */
+    }
+
+    .occupied {
+      background-color: #f44336; /* Red */
+    }
+
+    #status-msg {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>FindMySpot Dashboard</h1>
+  <div id="status-msg">Not connected to Firebase</div>
+  <div id="status-container"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtgVIVierhgo0jUXCbHBvMtLlRBzSEmp8",
+      authDomain: "findmyspot-88397.firebaseapp.com",
+      databaseURL: "https://findmyspot-88397-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "findmyspot-88397",
+      storageBucket: "findmyspot-88397.appspot.com",
+      messagingSenderId: "428682515015",
+      appId: "1:428682515015:web:9f809579d54d201cbd9762",
+      measurementId: "G-0NH31RNKMX"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const slotRef = database.ref();
+
+    // Fetch and display slot status
+    slotRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      const statusContainer = document.getElementById("status-container");
+      const statusMsg = document.getElementById("status-msg");
+
+      if (data) {
+        statusMsg.textContent = "Connected to Firebase";
+
+        // Clear previous cards
+        statusContainer.innerHTML = "";
+
+        // Loop through each slot dynamically
+        Object.keys(data).forEach((slotKey) => {
+          const slot = data[slotKey];
+          const div = document.createElement("div");
+          div.className = `slot-card ${slot.status === 'empty' ? 'empty' : 'occupied'}`;
+          div.textContent = `${slotKey.toUpperCase()}: ${slot.status ?? 'N/A'}`;
+          statusContainer.appendChild(div);
+        });
+      } else {
+        statusMsg.textContent = "No data found in Firebase";
+      }
+    }, (error) => {
+      console.error("Firebase error:", error);
+      document.getElementById("status-msg").textContent = "Error connecting to Firebase";
+    });
+  </script>
+</body>
+</html>

@@ -1,16 +1,71 @@
 // Declare firebase as a global variable to avoid errors
 var firebase = firebase || {}
 
-// Firebase configuration and initialization
+// Initialize Firebase and handle parking slot updates
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize Firebase directly
+  // Set current date
+  const now = new Date()
+  const options = { day: "numeric", month: "short" }
+  document.getElementById("current-date").textContent = now.toLocaleDateString("en-US", options)
+
+  // Initialize last updated time
+  const lastUpdatedTime = new Date()
+  updateLastUpdatedTime()
+
+  // Start timer to update "minutes ago" text
+  setInterval(updateLastUpdatedTime, 60000) // Update every minute
+
+  // Initialize Firebase
   initializeFirebase()
+
+  // Add refresh button functionality
+  document.getElementById("refresh-button").addEventListener("click", () => {
+    refreshData()
+  })
 })
+
+// Function to update the "last updated" time display
+function updateLastUpdatedTime() {
+  const now = new Date()
+  const lastUpdated = document.getElementById("last-updated")
+  const diffInMinutes = Math.floor((now - lastUpdatedTime) / 60000)
+  lastUpdated.textContent = diffInMinutes
+}
+
+// Function to refresh data
+function refreshData() {
+  const refreshButton = document.getElementById("refresh-button")
+  refreshButton.disabled = true
+  refreshButton.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refreshing...'
+
+  // Simulate refresh delay
+  setTimeout(() => {
+    // Update the last updated time
+    lastUpdatedTime = new Date()
+    updateLastUpdatedTime()
+
+    // Re-enable the refresh button
+    refreshButton.disabled = false
+    refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status'
+
+    // Force a re-read from Firebase
+    const database = firebase.database()
+    const slotRef = database.ref()
+    slotRef
+      .once("value")
+      .then((snapshot) => {
+        console.log("Data refreshed from Firebase")
+      })
+      .catch((error) => {
+        console.error("Error refreshing data:", error)
+      })
+  }, 1000)
+}
 
 // Function to initialize Firebase
 function initializeFirebase() {
   try {
-    // Firebase configuration - using your exact configuration
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBtgVIVierhgo0jUXCbHBvMtLlRBzSEmp8",
       authDomain: "findmyspot-88397.firebaseapp.com",
@@ -26,12 +81,7 @@ function initializeFirebase() {
     firebase.initializeApp(firebaseConfig)
     const database = firebase.database()
 
-    // DOM Elements
-    const connectionStatus = document.getElementById("connection-status")
-    const statusIndicator = connectionStatus.querySelector(".status-indicator")
-    const statusText = connectionStatus.querySelector(".status-text")
-
-    // Set initial connection status
+    // Update connection status
     updateConnectionStatus("connecting", "Connecting to Firebase...")
 
     // Check Firebase connection
@@ -44,16 +94,8 @@ function initializeFirebase() {
       }
     })
 
-    // Track previous slot statuses to detect changes
-    const previousStatuses = {
-      slot1: null,
-      slot2: null,
-      slot3: null,
-      slot4: null,
-    }
-
     // Get data from Firebase and display slot status
-    const slotRef = database.ref() // Get root of database
+    const slotRef = database.ref()
     slotRef.on(
       "value",
       (snapshot) => {
@@ -74,8 +116,12 @@ function initializeFirebase() {
             }
           }
 
-          // Update summary counts
-          updateSummary(data)
+          // Update occupied count
+          updateOccupiedCount(data)
+
+          // Update last updated time
+          lastUpdatedTime = new Date()
+          updateLastUpdatedTime()
         } else {
           updateConnectionStatus("disconnected", "No data found in Firebase")
           console.warn("No data received from Firebase")
@@ -168,6 +214,15 @@ function updateConnectionStatus(status, message) {
 
   statusIndicator.className = "status-indicator " + status
   statusText.textContent = message
+
+  // Hide connection status after 5 seconds if connected
+  if (status === "connected") {
+    setTimeout(() => {
+      connectionStatus.style.display = "none"
+    }, 5000)
+  } else {
+    connectionStatus.style.display = "flex"
+  }
 }
 
 // Track previous slot statuses to detect changes
@@ -188,23 +243,17 @@ function updateSlot(slotId, status) {
 
   console.log(`Updating ${slotId} with status: ${status}`)
 
-  // Default to unknown if status is undefined
-  status = status || "unknown"
+  // Remove all status classes
+  slotElement.classList.remove("empty", "occupied", "unknown")
 
-  // Update slot classes
-  slotElement.className = "slot-card"
-  if (status === "empty" || status === "occupied") {
-    slotElement.classList.add(status)
+  // Add appropriate class based on status
+  if (status === "empty") {
+    slotElement.classList.add("empty")
+  } else if (status === "occupied") {
+    slotElement.classList.add("occupied")
+  } else {
+    slotElement.classList.add("unknown")
   }
-
-  // Update slot status text
-  const statusElement = slotElement.querySelector(".slot-status")
-  statusElement.textContent = status.charAt(0).toUpperCase() + status.slice(1)
-
-  // Update time
-  const timeElement = slotElement.querySelector(".slot-time")
-  const now = new Date()
-  timeElement.textContent = `Updated: ${now.toLocaleTimeString()}`
 
   // Add animation for status change
   slotElement.classList.add("status-changed")
@@ -234,3 +283,24 @@ function updateSummary(data) {
   document.getElementById("available-count").textContent = emptyCount
   document.getElementById("occupied-count").textContent = occupiedCount
 }
+
+// Function to update occupied count
+function updateOccupiedCount(data) {
+  let occupiedCount = 0
+
+  // Count occupied slots
+  for (let i = 1; i <= 4; i++) {
+    const slotKey = `slot${i}`
+    const status = data[slotKey]?.status
+
+    if (status === "occupied") {
+      occupiedCount++
+    }
+  }
+
+  // Update counter in header
+  document.getElementById("occupied-count").textContent = occupiedCount
+}
+
+// Global variable for last updated time
+let lastUpdatedTime = new Date()
