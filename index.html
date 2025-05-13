@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FindMySpot Dashboard</title>
+  <title>ITB Parking Dashboard</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
@@ -21,14 +21,14 @@
         <h1>Parking Slots</h1>
       </div>
       <div class="header-right">
-        <div class="slot-counter"><span id="occupied-count">0</span> / 4</div>
+        <div class="slot-counter"><span id="occupied-count">2</span> / 4</div>
       </div>
     </header>
 
     <div class="location-info">
       <div class="location-details">
         <h2>ITB Parking</h2>
-        <p>2nd Eng Bldg Fl.1 Basement Parking</p>
+        <p>Civil Eng Gate 01, Basement Parking</p>
       </div>
       <div class="date-info">
         <i class="far fa-calendar-alt"></i>
@@ -37,55 +37,50 @@
     </div>
 
     <div class="parking-map">
-      <div class="road">
-        <div class="road-label">ENTRY</div>
+      <div class="road-label-top">ROAD</div>
+      <div class="youre-here">
+        <i class="fas fa-map-marker-alt"></i>
+        You're Here
       </div>
       
-      <div class="parking-grid">
-        <div id="slot1" class="parking-slot" data-slot-id="A21">
-          <div class="car-icon">
-            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-O0snaRQHV77bJYvEQrsMUofGIg71IV.png" alt="Car" class="car-image">
+      <div class="parking-layout">
+        <div class="slot-row">
+          <div class="slot-id-vertical left">A01</div>
+          <div id="slot1" class="parking-slot occupied" data-slot-id="A01">
+            <img src="car.png" class="car-icon" alt="Car">
           </div>
-          <div class="slot-id">A21</div>
+          <div class="entry-lane">
+            <div class="entry-label">ENTRY</div>
+          </div>
+          <div id="slot3" class="parking-slot empty" data-slot-id="A03">
+            <img src="car.png" class="car-icon" alt="Car">
+          </div>
+          <div class="slot-id-vertical right">A03</div>
         </div>
         
-        <div id="slot2" class="parking-slot" data-slot-id="A22">
-          <div class="car-icon">
-            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-O0snaRQHV77bJYvEQrsMUofGIg71IV.png" alt="Car" class="car-image">
+        <div class="slot-row">
+          <div class="slot-id-vertical left">A02</div>
+          <div id="slot2" class="parking-slot empty" data-slot-id="A02">
+            <img src="car.png" class="car-icon" alt="Car">
           </div>
-          <div class="slot-id">A22</div>
-        </div>
-        
-        <div id="slot3" class="parking-slot" data-slot-id="A23">
-          <div class="car-icon">
-            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-O0snaRQHV77bJYvEQrsMUofGIg71IV.png" alt="Car" class="car-image">
+          <div class="entry-lane"></div>
+          <div id="slot4" class="parking-slot occupied" data-slot-id="A04">
+            <img src="car.png" class="car-icon" alt="Car">
           </div>
-          <div class="slot-id">A23</div>
-        </div>
-        
-        <div id="slot4" class="parking-slot" data-slot-id="A24">
-          <div class="car-icon">
-            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-O0snaRQHV77bJYvEQrsMUofGIg71IV.png" alt="Car" class="car-image">
-          </div>
-          <div class="slot-id">A24</div>
+          <div class="slot-id-vertical right">A04</div>
         </div>
       </div>
     </div>
 
     <div class="status-bar">
       <div class="update-info">
-        <i class="fas fa-sync-alt"></i>
-        <span>Last Updated: <span id="last-updated">0</span> MIN</span>
+        <i class="fas fa-circle"></i>
+        <span>Last Updated: <span id="last-updated">10:30 WIB</span></span>
       </div>
       <button id="refresh-button" class="refresh-button">
         <i class="fas fa-sync-alt"></i>
         Refresh Status
       </button>
-    </div>
-
-    <div id="connection-status" class="connection-status">
-      <span class="status-indicator connecting"></span>
-      <span class="status-text">Connecting to Firebase...</span>
     </div>
   </div>
 

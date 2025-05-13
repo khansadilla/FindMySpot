@@ -1,319 +1,238 @@
 /* Base Styles */
 :root {
-    --background-color: #0f1123;
-    --card-background: #1a1c33;
-    --text-color: #ffffff;
-    --text-secondary: #a0a0b0;
-    --accent-color: #ff9800;
-    --empty-color: #1a1c33;
-    --occupied-color: #ff9800;
-    --border-color: #2a2c43;
-    --header-height: 60px;
-  }
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: "Arial", sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  .dashboard {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    max-width: 100%;
-    margin: 0 auto;
-  }
-  
-  /* Header Styles */
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 15px;
-    height: var(--header-height);
-    background-color: var(--background-color);
-    border-bottom: 1px solid var(--border-color);
-  }
-  
-  .header-left,
-  .header-right {
-    flex: 1;
-  }
-  
-  .header-center {
-    flex: 2;
-    text-align: center;
-  }
-  
-  .back-button {
-    background: none;
-    border: none;
-    color: var(--text-color);
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-  
-  h1 {
-    font-size: 1.2rem;
-    font-weight: 500;
-  }
-  
-  .slot-counter {
-    text-align: right;
-    font-size: 1rem;
-  }
-  
-  /* Location Info */
-  .location-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    background-color: var(--background-color);
-  }
-  
-  .location-details h2 {
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-bottom: 5px;
-  }
-  
-  .location-details p {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-  }
-  
-  .date-info {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-  }
-  
-  /* Parking Map */
-  .parking-map {
-    flex: 1;
-    display: flex;
-    background-color: var(--card-background);
-    position: relative;
-    overflow: hidden;
-    border-top: 1px dashed var(--border-color);
-    border-bottom: 1px dashed var(--border-color);
-  }
-  
-  .road {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 80px;
-    transform: translateX(-50%);
-    background-color: #000000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-  }
-  
-  .road-label {
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    transform: rotate(90deg);
-  }
-  
-  .parking-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .parking-slot {
-    position: relative;
-    border: 1px dashed var(--border-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.3s ease;
-  }
-  
-  .parking-slot:nth-child(1),
-  .parking-slot:nth-child(3) {
-    margin-right: 40px;
-  }
-  
-  .parking-slot:nth-child(2),
-  .parking-slot:nth-child(4) {
-    margin-left: 40px;
-  }
-  
-  .slot-id {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-  }
-  
-  .car-icon {
-    width: 60px;
-    height: 30px;
-    display: none; /* Hidden by default */
-    transition: opacity 0.3s ease;
-  }
-  
-  .car-image {
-    width: 100%;
-    height: auto;
-    filter: brightness(0) saturate(100%) invert(65%) sepia(60%) saturate(2572%) hue-rotate(360deg) brightness(102%)
-      contrast(106%);
-  }
-  
-  .parking-slot.occupied .car-icon {
-    display: block;
-  }
-  
-  /* Status Bar */
-  .status-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    background-color: var(--background-color);
-  }
-  
-  .update-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-  }
-  
-  .refresh-button {
-    background-color: var(--card-background);
-    color: var(--text-color);
-    border: none;
-    border-radius: 20px;
-    padding: 8px 15px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  .refresh-button:hover {
-    background-color: #2a2c43;
-  }
-  
-  /* Connection Status */
-  .connection-status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    background-color: var(--card-background);
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-  }
-  
-  .status-indicator {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
-  
-  .connecting {
-    background-color: #ffc107;
-    animation: pulse 1.5s infinite;
-  }
-  
-  .connected {
-    background-color: #4caf50;
-  }
-  
-  .disconnected {
-    background-color: #f44336;
-  }
-  
-  @keyframes pulse {
-    0% {
-      opacity: 0.5;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0.5;
-    }
-  }
-  
-  /* Animation for status change */
-  @keyframes statusChange {
-    0% {
-      transform: scale(0.95);
-      opacity: 0.7;
-    }
-    50% {
-      transform: scale(1.05);
-      opacity: 1;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-  
-  .status-changed {
-    animation: statusChange 0.5s ease-in-out;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .parking-grid {
-      grid-template-columns: 1fr;
-      grid-template-rows: repeat(4, 1fr);
-    }
-  
-    .road {
-      left: 0;
-      right: 0;
-      top: 50%;
-      bottom: auto;
-      width: 100%;
-      height: 60px;
-      transform: translateY(-50%);
-    }
-  
-    .road-label {
-      transform: rotate(0);
-    }
-  
-    .parking-slot:nth-child(1),
-    .parking-slot:nth-child(2) {
-      margin-right: 0;
-      margin-bottom: 30px;
-    }
-  
-    .parking-slot:nth-child(3),
-    .parking-slot:nth-child(4) {
-      margin-left: 0;
-      margin-top: 30px;
-    }
-  }
-  
+  --background-color: #141429;
+  --header-bg: linear-gradient(to right, #e67e22, #d35400);
+  --text-color: #ffffff;
+  --text-secondary: #a0a0b0;
+  --accent-color: #e67e22;
+  --border-color: rgba(255, 255, 255, 0.2);
+  --header-height: 60px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arial", sans-serif;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Header Styles */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  height: var(--header-height);
+  background: var(--header-bg);
+  color: white;
+}
+
+.header-left,
+.header-right {
+  flex: 1;
+}
+
+.header-center {
+  flex: 2;
+  text-align: center;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.slot-counter {
+  text-align: right;
+  font-size: 1rem;
+}
+
+/* Location Info */
+.location-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: var(--background-color);
+}
+
+.location-details h2 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.location-details p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.date-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: white;
+  font-size: 0.9rem;
+}
+
+/* Parking Map */
+.parking-map {
+  flex: 1;
+  background-color: var(--background-color);
+  position: relative;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.road-label-top {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  color: var(--accent-color);
+  font-size: 0.8rem;
+}
+
+.youre-here {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--accent-color);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.parking-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px dashed var(--border-color);
+  margin-top: 30px;
+}
+
+.slot-row {
+  display: flex;
+  flex: 1;
+}
+
+.parking-slot {
+  flex: 1;
+  border: 1px dashed var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.entry-lane {
+  width: 180px;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  top : 10px;
+  position: relative;
+}
+
+.entry-label {
+  color: var(--accent-color);
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+
+.slot-id-vertical {
+  color: var(--accent-color);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  width: 20px;
+}
+
+.slot-id-vertical.left {
+  transform: rotate(180deg);
+}
+
+.car-icon {
+  width: 220px;
+  height: auto;
+  display: none;
+}
+
+.parking-slot.occupied .car-icon {
+  display: block;
+}
+
+/* Status Bar */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: var(--background-color);
+}
+
+.update-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.update-info i {
+  color: white;
+  font-size: 0.6rem;
+}
+
+.refresh-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.refresh-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
