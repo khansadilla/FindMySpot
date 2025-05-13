@@ -1,0 +1,14 @@
+{
+  "slot1": {
+    "status": "empty"
+  },
+  "slot2": {
+    "status": "occupied"
+  },
+  "slot3": {
+    "status": "empty"
+  },
+  "slot4": {
+    "status": "occupied"
+  }
+}
