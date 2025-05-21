@@ -122,8 +122,8 @@ h1 {
 }
 
 .youre-here {
-  position: absolute;
-  top: -10px;
+  position: fixed;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--accent-color);
@@ -146,8 +146,10 @@ h1 {
 
 .slot-row {
   display: flex;
+  align-items: stretch; /* penting biar semua child (termasuk .entry-lane) punya tinggi sama */
   flex: 1;
 }
+
 
 .parking-slot {
   flex: 1;
@@ -160,18 +162,22 @@ h1 {
 
 .entry-lane {
   width: 180px;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  top : 10px;
+  height: 100%; /* ⬅️ Wajib untuk ngisi tinggi penuh parent */
+  background-color: #b3b3b38c;
   position: relative;
+  display: block; /* Jangan pakai flex kalau mau pakai position absolute di dalam */
 }
 
 .entry-label {
+  position: absolute;
+  bottom: 5px; /* Supaya nempel di bawah */
+  left: 50%;
+  transform: translateX(-50%);
   color: var(--accent-color);
-  white-space: nowrap;
   font-size: 0.8rem;
 }
+
+
 
 .slot-id-vertical {
   color: var(--accent-color);
@@ -236,3 +242,4 @@ h1 {
 .refresh-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
+
