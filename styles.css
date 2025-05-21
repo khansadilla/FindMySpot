@@ -1,4 +1,11 @@
 /* Base Styles */
+.dashboard header h1 {
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: bold;
+  font-size: 25px;
+  color: white;
+}
+
 :root {
   --background-color: #141429;
   --header-bg: linear-gradient(to right, #e67e22, #d35400);
@@ -30,9 +37,9 @@ body {
   height: 100vh;
   max-width: 100%;
   margin: 0 auto;
-  border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
 }
 
 /* Header Styles */
@@ -105,6 +112,8 @@ h1 {
 
 /* Parking Map */
 .parking-map {
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
   flex: 1;
   background-color: var(--background-color);
   position: relative;
@@ -113,13 +122,6 @@ h1 {
   flex-direction: column;
 }
 
-.road-label-top {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  color: var(--accent-color);
-  font-size: 0.8rem;
-}
 
 .youre-here {
   position: fixed;
@@ -136,12 +138,17 @@ h1 {
   gap: 5px;
 }
 
+.entry-label-top {
+  font-size: 0.75rem;
+  color: #555;
+  margin-bottom: 4px;
+}
+
 .parking-layout {
   flex: 1;
   display: flex;
   flex-direction: column;
   border: 1px dashed var(--border-color);
-  margin-top: 30px;
 }
 
 .slot-row {
@@ -161,9 +168,9 @@ h1 {
 }
 
 .entry-lane {
-  width: 180px;
+  width: 200px;
   height: 100%; /* ⬅️ Wajib untuk ngisi tinggi penuh parent */
-  background-color: #b3b3b38c;
+  background-color: #615e5e8c;
   position: relative;
   display: block; /* Jangan pakai flex kalau mau pakai position absolute di dalam */
 }
@@ -174,7 +181,7 @@ h1 {
   left: 50%;
   transform: translateX(-50%);
   color: var(--accent-color);
-  font-size: 0.8rem;
+  font-size: 1.4rem;
 }
 
 
@@ -243,3 +250,44 @@ h1 {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
+.entry-text {
+  position: fixed;
+  bottom: 60px; /* posisinya di atas "You're Here" */
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent-color);
+  font-size: 0.9rem;
+}
+
+/* Tambahkan di styles.css */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative; /* Untuk positioning child elements */
+}
+
+.parking-map {
+  flex: 1;
+  overflow: auto; /* Jika konten melebihi tinggi */
+}
+
+.bottom-elements {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  bottom : 10px;
+  position: relative;
+  background-color: var(--background-color);
+}
+
+.contact-button button {
+  background-color: #ff6f00;
+  color: white;
+  padding: 7px 7px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}

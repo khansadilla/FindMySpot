@@ -569,7 +569,7 @@ function updateOccupiedCount(data) {
   }
 
   // Update counter in header
-  document.getElementById("occupied-count").textContent = occupiedCount
+  document.getElementById("occupied-count").textContent = 4-occupiedCount
 }
 
 // Add manual testing functions for development

@@ -15,13 +15,10 @@
   <div class="dashboard">
     <header>
       <div class="header-left">
-        <button class="back-button"><i class="fas fa-chevron-left"></i></button>
-      </div>
-      <div class="header-center">
         <h1>Parking Slots</h1>
       </div>
       <div class="header-right">
-        <div class="slot-counter"><span id="occupied-count">2</span> / 4</div>
+        <div class="slot-counter">Slot Left : <span id="occupied-count">2</span> / 4</div>
       </div>
     </header>
 
@@ -30,59 +27,58 @@
         <h2>ITB Parking</h2>
         <p>Civil Eng Gate 01, Basement Parking</p>
       </div>
-      <div class="date-info">
-        <i class="far fa-calendar-alt"></i>
-        <span id="current-date">5 May</span>
-      </div>
     </div>
-
     <div class="parking-map">
-      <div class="road-label-top">ROAD</div>
       <div class="youre-here">
         <i class="fas fa-map-marker-alt"></i>
-        You're Here
+        Entry
       </div>
       
       <div class="parking-layout">
         <div class="slot-row">
-          <div class="slot-id-vertical left">A01</div>
-          <div id="slot1" class="parking-slot occupied" data-slot-id="A01">
+          <div class="slot-id-vertical left">A03</div>
+          <div id="slot1" class="parking-slot occupied" data-slot-id="A03">
             <img src="car.png" class="car-icon" alt="Car">
           </div>
           <div class="entry-lane">
-            <div class="entry-label">ENTRY</div>
+            <div class="entry-label">ROAD</div>
           </div>
-          <div id="slot3" class="parking-slot empty" data-slot-id="A03">
-            <img src="car.png" class="car-icon" alt="Car">
-          </div>
-          <div class="slot-id-vertical right">A03</div>
-        </div>
-        
-        <div class="slot-row">
-          <div class="slot-id-vertical left">A02</div>
-          <div id="slot2" class="parking-slot empty" data-slot-id="A02">
-            <img src="car.png" class="car-icon" alt="Car">
-          </div>
-          <div class="entry-lane"></div>
-          <div id="slot4" class="parking-slot occupied" data-slot-id="A04">
+          <div id="slot3" class="parking-slot empty" data-slot-id="A04">
             <img src="car.png" class="car-icon" alt="Car">
           </div>
           <div class="slot-id-vertical right">A04</div>
         </div>
+        
+        <div class="slot-row">
+          <div class="slot-id-vertical left">A01</div>
+          <div id="slot2" class="parking-slot empty" data-slot-id="A01">
+            <img src="car.png" class="car-icon" alt="Car">
+          </div>
+          <div class="entry-lane"></div>
+          <div id="slot4" class="parking-slot occupied" data-slot-id="A02">
+            <img src="car.png" class="car-icon" alt="Car">
+          </div>
+          <div class="slot-id-vertical right">A02</div>
+        </div>
       </div>
     </div>
 
-    <div class="status-bar">
-      <div class="update-info">
-        <i class="fas fa-circle"></i>
-        <span>Last Updated: <span id="last-updated">10:30 WIB</span></span>
-      </div>
-      <button id="refresh-button" class="refresh-button">
-        <i class="fas fa-sync-alt"></i>
-        Refresh Status
+<div class="bottom-elements">
+    <a href="https://wa.me/6289623479505?text=Halo%20saya%20ingin%20tanya%20tentang%20slot%20parkir" 
+       target="_blank"
+       class="contact-button">
+      <button>
+        📲 Contact Us
       </button>
+    </a>
+    
+    <div class="youre-here">
+      <i class="fas fa-map-marker-alt"></i>
+      Entry
     </div>
   </div>
+</div>
+
 
   <script src="script.js"></script>
 </body>
